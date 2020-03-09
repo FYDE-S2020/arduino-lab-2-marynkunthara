@@ -46,8 +46,8 @@ char auth[] = "AJv93kUuA-gPnHagVLZJHJTZ7U0sp-_V";
 // Set password to "" for open networks.
 // The EE IOT network is hidden. You might not be able to see it.
 // But you should be able to connect with these credentials. 
-char ssid[32] = "Kunthara iPhone";
-char pass[32] = "w69ve3rqcrzui";
+char ssid[32] = "EE-IOT-Platform-02";
+char pass[32] = "g!TyA>hR2JTy";
 
 
 const int freq = 5000;     // 5KHz frequency is more than enough. Remember we used 100 before.
@@ -57,6 +57,8 @@ const int resolution = 10; // 10 bit resolution for 1023. Freq should be greater
 int time_count = 0; // timer counter global variable
 String content = "";  // null string constant ( an empty string )
 BlynkTimer timer;
+int pinValue;
+int val;
 
 void myTimerEvent() // Every 10 ms
 {
@@ -91,9 +93,15 @@ void setup()  // You need to initialize the timer interval and set your function
   Blynk.begin(auth, ssid, pass);
   pinMode(LED, OUTPUT);
   
-  timer.setInterval(1000L, myTimerEvent);
+
   timer.setInterval(10L, myTimerEvent); // 10 ms interval
   // Setup a timer with function to be called every 10ms
+
+  // configure LED PWM functionality
+    ledcSetup(ledChannel, freq, resolution);
+
+    // attach the channel to the GPIO to be controlled
+    ledcAttachPin(LED, ledChannel);
 }
 
 
@@ -107,15 +115,25 @@ BLYNK_WRITE(V0)
 {
 
     // param is a member variable of the Blynk ADT. It is exposed so you can read it.
-    int pinValue = param.asInt(); // assigning incoming value from pin V1 to a variable
+    pinValue = param.asInt(); // assigning incoming value from pin V0 to a variable
 
-    // Because V1 is a button, pinValue will be a 0 or a 1.
+    // Because V0 is a button, pinValue will be a 0 or a 1.
     if (pinValue == 0) {
-        // turn LED off
-        digitalWrite(LED, LOW);
+      ledcWrite(ledChannel, 0); // Note that this takes ledChannel as an argument, NOT the pin! Set duty = val.
+         
     }
     else {
       // turn LED on
-      digitalWrite(LED, HIGH); 
+      ledcWrite(ledChannel, val); // Note that this takes ledChannel as an argument, NOT the pin! Set duty = val.
+      
+    }
+}
+
+BLYNK_WRITE(V1)
+{
+    // param is a member variable of the Blynk ADT. It is exposed so you can read it.
+    val = param.asInt(); // assigning incoming value from pin V1 to a variable
+    if (pinValue == !0){
+    ledcWrite(ledChannel, val); // Note that this takes ledChannel as an argument, NOT the pin! Set duty = val.
     }
 }
