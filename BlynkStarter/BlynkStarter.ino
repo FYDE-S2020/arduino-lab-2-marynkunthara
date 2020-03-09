@@ -57,7 +57,7 @@ const int resolution = 10; // 10 bit resolution for 1023. Freq should be greater
 int time_count = 0; // timer counter global variable
 String content = "";  // null string constant ( an empty string )
 BlynkTimer timer;
-int pinValue;
+int State;
 int val;
 
 void myTimerEvent() // Every 10 ms
@@ -115,10 +115,10 @@ BLYNK_WRITE(V0)
 {
 
     // param is a member variable of the Blynk ADT. It is exposed so you can read it.
-    pinValue = param.asInt(); // assigning incoming value from pin V0 to a variable
+    State = param.asInt(); // assigning incoming value from pin V0 to a variable
 
     // Because V0 is a button, pinValue will be a 0 or a 1.
-    if (pinValue == 0) {
+    if (State == 0) {
       ledcWrite(ledChannel, 0); // Note that this takes ledChannel as an argument, NOT the pin! Set duty = val.
          
     }
@@ -133,7 +133,7 @@ BLYNK_WRITE(V1)
 {
     // param is a member variable of the Blynk ADT. It is exposed so you can read it.
     val = param.asInt(); // assigning incoming value from pin V1 to a variable
-    if (pinValue == !0){
+    if (State == !0){
     ledcWrite(ledChannel, val); // Note that this takes ledChannel as an argument, NOT the pin! Set duty = val.
     }
 }
