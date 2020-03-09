@@ -8,7 +8,7 @@ Team Number:
 
 1. What is the purpose of an IP address?
 
-    answer
+    For machines to learn identities of the (possibly hundreds of) machines in other LANs , we need a naming mechanism and accompanying discovery methods. This naming mechanism gives each machine a “unique” identity called, its IP (Internet Protocol) address. 
 
 2. What is a DNS? What are the benefits of using domain names instead of IP addresses?
 
